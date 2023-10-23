@@ -14,8 +14,53 @@ results 배열 각 행 [A, B]는 A 선수가 B 선수를 이겼다는 의미입�
 n	results	return
 5	[[4, 3], [4, 2], [3, 2], [1, 2], [2, 5]]	2
 """
-# TODO
+# CHECK, 플루이드 와샬
+
+
+# def matrix_bool_mul(n, mat1, mat2):
+#     result = [[False for _ in range(n)] for _ in range(n)]
+#
+#     for i in range(n):
+#         for j in range(n):
+#             for k in range(n):
+#                 if mat1[i][k] and mat2[k][j]:
+#                     result[i][j] = True
+#
+#     return result
 
 
 def solution(n, results):
-    return
+    graph = [[False for _ in range(n)] for _ in range(n)]
+
+    for i in range(n):
+        graph[i][i] = True
+
+    for dep, dest in results:
+        dep -= 1
+        dest -= 1
+        graph[dep][dest] = True
+
+    # for i in range(n-1):
+    #     if i == 0:
+    #         p = matrix_bool_mul(n, graph, graph)
+    #     else:
+    #         p = matrix_bool_mul(n, p, graph)
+
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if graph[i][k] and graph[k][j]:
+                    graph[i][j] = True
+
+    answer = 0
+    for i in range(n):
+        for j in range(n):
+            if not (graph[i][j] or graph[j][i]):
+                break
+        else:
+            answer += 1
+
+    return answer
+
+
+print(solution(5, [[4, 3], [4, 2], [3, 2], [1, 2], [2, 5]]))
